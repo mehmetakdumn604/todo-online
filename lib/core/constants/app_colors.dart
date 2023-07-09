@@ -16,6 +16,7 @@ class AppColors {
   Color iconColor = const Color(0xffB85124);
   Color doneColor = const Color(0xffFAA885);
   Color profileBgColor = const Color(0xffCF7751);
+  Color greenColor = const Color.fromARGB(255, 53, 176, 57);
 }
 
 class AppStyles {

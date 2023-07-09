@@ -5,15 +5,20 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const TextStyle textStyle = TextStyle(
+      color: Colors.white,
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    );
     return Container(
       width: 1.sw,
-      height: 190.h,
+      height: 230.h,
       color: AppColors.instance.profileBgColor,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(),
           CircleAvatar(
-            radius: 70.r,
+            radius: 60.r,
             backgroundImage: const CachedNetworkImageProvider(
               AppStrings.profileImage,
               cacheKey: AppStrings.profileImage,
@@ -34,6 +39,43 @@ class _Header extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: ValueListenableBuilder(
+                  valueListenable: LocalDbManager.instance.tasksBox.listenable(),
+                  builder: (context, Box box, child) {
+                    List tasks = box.get(LocalDbManager.instance.tasksDb) ?? [];
+                    double linearValue =
+                        tasks.where((element) => element.isCompleted).toList().length /
+                            tasks.length;
+
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total Task : ${tasks.length}",
+                              style: textStyle,
+                            ),
+                            Text(
+                              "% ${linearValue * 100}",
+                              style: textStyle,
+                            ),
+                          ],
+                        ),
+                        LinearProgressIndicator(
+                          value: linearValue,
+                          minHeight: 20.h,
+                          color: AppColors.instance.greenColor,
+                        ),
+                      ],
+                    );
+                  }),
+            ),
+          )
         ],
       ),
     );
